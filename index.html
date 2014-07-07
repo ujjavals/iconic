@@ -1,25 +1,84 @@
+<!doctype html>
 <html ng-app="ionicApp">
   <head>
     <meta charset="utf-8">
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width"> 
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    
+    <title>Side Menus</title>
 
-        <title>Ionic Gallery</title>
+    <link href="http://code.ionicframework.com/nightly/css/ionic.css" rel="stylesheet">
+    <script src="http://code.ionicframework.com/nightly/js/ionic.bundle.js"></script>
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-        <link href="http://code.ionicframework.com/nightly/css/ionic.min.css" rel="stylesheet">
-          <script src="http://code.ionicframework.com/nightly/js/ionic.bundle.js"></script>
-		  <style>
-			.gallery-scroller {
+  </head>
+ <style>
+	body {
+  cursor: url('http://ionicframework.com/img/finger.png'), auto;
+}
+
+.scroll-view{
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+.gallery-scroller {
   overflow: auto;
   overflow-x: scroll;
   overflow-y: hidden;
   white-space: nowrap;
 }
-		  </style>
-		  <script>
-			angular.module('ionicApp', ['ionic'])
+.item{
+height:150px;
+margin:30px 0px;
+}
 
-.controller('GalleryCtrl', ['$scope', function($scope) {
-  var placeholder = "http://placehold.it/150x150";
+ </style>
+ <script>
+	angular.module('ionicApp', ['ionic'])
+
+.config(function($stateProvider, $urlRouterProvider) {
+
+  $stateProvider
+    .state('eventmenu', {
+      url: "/event",
+      abstract: true,
+      templateUrl: "event-menu.html"
+    })
+    .state('eventmenu.home', {
+      url: "/home",
+      views: {
+        'menuContent' :{
+          templateUrl: "home.html"
+        }
+      }
+    })
+    .state('eventmenu.checkin', {
+      url: "/check-in",
+      views: {
+        'menuContent' :{
+          templateUrl: "check-in.html",
+          controller: "CheckinCtrl"
+        }
+      }
+    })
+    .state('eventmenu.attendees', {
+      url: "/attendees",
+      views: {
+        'menuContent' :{
+          templateUrl: "attendees.html",
+          controller: "AttendeesCtrl"
+        }
+      }
+    })
+  
+  $urlRouterProvider.otherwise("/event/home");
+})
+
+.controller('MainCtrl', function($scope, $ionicSideMenuDelegate) {
+	
+	 var placeholder = "http://placehold.it/150x150";
   var gallery = [
     {"id": 1, "thumbnail": placeholder},
     {"id": 2, "thumbnail": placeholder},
@@ -82,20 +141,102 @@
     alert("LOADMORE PICTURES");
     $scope.$broadcast('scroll.infiniteScrollComplete');
   };
+	
+
+  $scope.attendees = [
+    { firstname: 'Nicolas', lastname: 'Cage' },
+    { firstname: 'Jean-Claude', lastname: 'Van Damme' },
+    { firstname: 'Keanu', lastname: 'Reeves' },
+    { firstname: 'Steven', lastname: 'Seagal' }
+  ];
   
-}]);
-		  </script>
-          </head>
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+  
+  
+  
+  
+})
 
-        <body ng-controller="GalleryCtrl">
+.controller('CheckinCtrl', function($scope) {
+  $scope.showForm = true;
+  
+  $scope.shirtSizes = [
+    { text: 'Large', value: 'L' },
+    { text: 'Medium', value: 'M' },
+    { text: 'Small', value: 'S' }
+  ];
+  
+  $scope.attendee = {};
+  $scope.submit = function() {
+    if(!$scope.attendee.firstname) {
+      alert('Info required');
+      return;
+    }
+    $scope.showForm = false;
+    $scope.attendees.push($scope.attendee);
+  };
+  
+})
 
-          <ion-header-bar class="bar-positive">
-            <h1 class="title">Gallery</h1>
+.controller('AttendeesCtrl', function($scope) {
+  
+  $scope.activity = [];
+  $scope.arrivedChange = function(attendee) {
+    var msg = attendee.firstname + ' ' + attendee.lastname;
+    msg += (!attendee.arrived ? ' has arrived, ' : ' just left, '); 
+    msg += new Date().getMilliseconds();
+    $scope.activity.push(msg);
+    if($scope.activity.length > 3) {
+      $scope.activity.splice(0, 1);
+    }
+  };
+  
+});
+ </script>
+  <body>
+    
+    <div ng-controller="MainCtrl">       
+      <ion-nav-view></ion-nav-view>
+    </div>
+    
+    <script id="event-menu.html" type="text/ng-template">
+      <ion-side-menus>
+        
+        <ion-side-menu-content drag-content="false">
+          <ion-nav-bar class="bar-positive">
+            <ion-nav-back-button class="button-icon ion-arrow-left-c">
+            </ion-nav-back-button>
+          </ion-nav-bar>
+          <ion-nav-buttons side="left">
+            <button class="button button-icon button-clear ion-navicon" ng-click="toggleLeft()">
+				<i class="fa fa-bars"></i>
+            </button>
+          </ion-nav-buttons>
+          <ion-nav-view name="menuContent"></ion-nav-view>
+        </ion-side-menu-content> 
+        
+        <ion-side-menu side="left">
+          <ion-header-bar class="bar-assertive">
+            <h1 class="title">Left Menu</h1>
           </ion-header-bar>
-
           <ion-content>
-
-            <div class="item" ng-repeat="gallery in galleryList">
+            <ul class="list">
+              <a href="#/event/check-in" class="item" menu-close>Check-in</a>
+              <a href="#/event/attendees" class="item" menu-close>Attendees</a>
+            </ul>
+          </ion-content>
+        </ion-side-menu>
+        
+      </ion-side-menus>
+    </script>
+    
+    <script id="home.html" type="text/ng-template">
+      <ion-view title="Welcome">
+        <ion-content>
+         <div>
+			 <div class="item" ng-repeat="gallery in galleryList">
               <ion-scroll direction="x">
                 <ion-infinite-scroll
                                      on-infinite="loadMorePictures"
@@ -105,10 +246,74 @@
                   <img class="vh20 picture" src="{{ picture.thumbnail }}">
                     </a>
                   </ion-scroll>
-                </div>
+             </div>
 
-   <ion-infinite-scroll on-infinite="loadMoreGallery"  distance="10%"></ion-infinite-scroll>
-              </ion-content>
+			<ion-infinite-scroll on-infinite="loadMoreGallery"  distance="10%"></ion-infinite-scroll>
+		</div>
+        </ion-content>
+      </ion-view>
+    </script>
+    
+    <script id="check-in.html" type="text/ng-template">
+      <ion-view title="Event Check-in">
+        <ion-content>
+          <form class="list" ng-show="showForm">
+            <div class="item item-divider">
+              Attendee Info
+            </div>
+            <label class="item item-input">
+              <input type="text" placeholder="First Name" ng-model="attendee.firstname">
+            </label>
+            <label class="item item-input">
+              <input type="text" placeholder="Last Name" ng-model="attendee.lastname">
+            </label>
+            <div class="item item-divider">
+              Shirt Size
+            </div>
+            <ion-radio ng-repeat="shirtSize in shirtSizes"
+                       ng-value="shirtSize.value"
+                       ng-model="attendee.shirtSize">
+              {{ shirtSize.text }}
+            </ion-radio>
+            <div class="item item-divider">
+              Lunch
+            </div>
+            <ion-toggle ng-model="attendee.vegetarian">
+              Vegetarian
+            </ion-toggle>
+            <div class="padding">
+              <button class="button button-block" ng-click="submit()">Checkin</button>
+            </div>
+          </form>
 
-            </body>
-          </html>
+          <div ng-hide="showForm">
+            <pre ng-bind="attendee | json"></pre> 
+            <a href="#/event/attendees">View attendees</a>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+    
+    <script id="attendees.html" type="text/ng-template">
+      <ion-view title="Event Attendees" left-buttons="leftButtons">
+        <ion-content>
+          <div class="list">
+            <ion-toggle ng-repeat="attendee in attendees | orderBy:'firstname' | orderBy:'lastname'"
+                        ng-model="attendee.arrived"
+                        ng-change="arrivedChange(attendee)">
+              {{ attendee.firstname }}
+              {{ attendee.lastname }}
+            </ion-toggle>
+            <div class="item item-divider">
+              Activity
+            </div>
+            <div class="item" ng-repeat="msg in activity">
+              {{ msg }}
+            </div>
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+    
+  </body>
+</html>
