@@ -8,6 +8,7 @@
 
     <link href="http://code.ionicframework.com/nightly/css/ionic.css" rel="stylesheet">
     <script src="http://code.ionicframework.com/nightly/js/ionic.bundle.js"></script>
+	 <script src="jquery.js"></script>
 	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
   </head>
@@ -33,9 +34,28 @@
 height:150px;
 margin:30px 0px;
 }
+.scroll > a {
+    display: inline-block;
+    margin-left: 10px;
+    position: relative;
+}
+.content_on_images{
+  bottom: 19px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 99;
+}
 
  </style>
  <script>
+ 
+
+//alert(arrex[1]['site']);
+	//alert(arrex['2']['site2']);
+	//alert(arrex);
+	//alert(gallery99);
+	
 	angular.module('ionicApp', ['ionic'])
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -74,87 +94,80 @@ margin:30px 0px;
     })
   
   $urlRouterProvider.otherwise("/event/home");
+  
+  
+  
+  
 })
 
 .controller('MainCtrl', function($scope, $ionicSideMenuDelegate) {
 	
-	 var placeholder = "http://placehold.it/150x150";
-  var gallery = [
-    {"id": 1, "thumbnail": placeholder},
-    {"id": 2, "thumbnail": placeholder},
-    {"id": 3, "thumbnail": placeholder},
-    {"id": 4, "thumbnail": placeholder},
-    {"id": 5, "thumbnail": placeholder},
-    {"id": 6, "thumbnail": placeholder},
-    {"id": 7, "thumbnail": placeholder},
-    {"id": 8, "thumbnail": placeholder},
-    {"id": 9, "thumbnail": placeholder},
-    {"id": 10, "thumbnail": placeholder}
-  ];
-  
-   var gallery2 = [
-    {"id": 1, "thumbnail": placeholder},
-    {"id": 2, "thumbnail": placeholder},
-    {"id": 3, "thumbnail": placeholder},
-    {"id": 4, "thumbnail": placeholder},
-    {"id": 5, "thumbnail": placeholder},
-    {"id": 6, "thumbnail": placeholder},
-    {"id": 7, "thumbnail": placeholder},
-    {"id": 8, "thumbnail": placeholder},
-    {"id": 9, "thumbnail": placeholder},
-    {"id": 10, "thumbnail": placeholder}
-  ];
-  
-   var gallery3 = [
-    {"id": 1, "thumbnail": placeholder},
-    {"id": 2, "thumbnail": placeholder},
-    {"id": 3, "thumbnail": placeholder},
-    {"id": 4, "thumbnail": placeholder},
-    {"id": 5, "thumbnail": placeholder},
-    {"id": 6, "thumbnail": placeholder},
-    {"id": 7, "thumbnail": placeholder},
-    {"id": 8, "thumbnail": placeholder},
-    {"id": 9, "thumbnail": placeholder},
-    {"id": 10, "thumbnail": placeholder}
-  ];
-  
-   var gallery4 = [
-    {"id": 1, "thumbnail": placeholder},
-    {"id": 2, "thumbnail": placeholder},
-    {"id": 3, "thumbnail": placeholder},
-    {"id": 4, "thumbnail": placeholder},
-    {"id": 5, "thumbnail": placeholder},
-    {"id": 6, "thumbnail": placeholder},
-    {"id": 7, "thumbnail": placeholder},
-    {"id": 8, "thumbnail": placeholder},
-    {"id": 9, "thumbnail": placeholder},
-    {"id": 10, "thumbnail": placeholder}
-  ];
-  
-  $scope.galleryList = [gallery, gallery2, gallery3, gallery4];
-  
-  $scope.loadMoreGallery = function() {
-    alert("LOADMORE GALLERY");
-  };
-  
-  $scope.loadMorePictures = function() {
-    alert("LOADMORE PICTURES");
-    $scope.$broadcast('scroll.infiniteScrollComplete');
-  };
 	
+	
+	
+	var placeholder = "http://placehold.it/150x150";
+	var gallery2 = [
+									{"id": 1, "thumbnail": placeholder},
+									{"id": 2, "thumbnail": placeholder},
+									{"id": 3, "thumbnail": placeholder},
+									{"id": 4, "thumbnail": placeholder},
+									{"id": 5, "thumbnail": placeholder},
+									{"id": 6, "thumbnail": placeholder},
+									{"id": 7, "thumbnail": placeholder},
+									{"id": 8, "thumbnail": placeholder},
+									{"id": 9, "thumbnail": placeholder},
+									{"id": 10, "thumbnail": placeholder}
+								  ];
+								  
+								   var gallery3 = [
+									{"id": 1, "thumbnail": placeholder},
+									{"id": 2, "thumbnail": placeholder},
+									{"id": 3, "thumbnail": placeholder},
+									{"id": 4, "thumbnail": placeholder},
+									{"id": 5, "thumbnail": placeholder},
+									{"id": 6, "thumbnail": placeholder},
+									{"id": 7, "thumbnail": placeholder},
+									{"id": 8, "thumbnail": placeholder},
+									{"id": 9, "thumbnail": placeholder},
+									{"id": 10, "thumbnail": placeholder}
+								  ];
+								  
+								   var gallery4 = [
+									{"id": 1, "thumbnail": placeholder},
+									{"id": 2, "thumbnail": placeholder},
+									{"id": 3, "thumbnail": placeholder},
+									{"id": 4, "thumbnail": placeholder},
+									{"id": 5, "thumbnail": placeholder},
+									{"id": 6, "thumbnail": placeholder},
+									{"id": 7, "thumbnail": placeholder},
+									{"id": 8, "thumbnail": placeholder},
+									{"id": 9, "thumbnail": placeholder},
+									{"id": 10, "thumbnail": placeholder}
+								  ];
+								  			
+	
+	 $scope.galleryList = [gallery2, gallery3, gallery4];
+								  
+								  $scope.loadMoreGallery = function() {
+									alert("LOADMORE GALLERY");
+								  };
+								  
+								  $scope.loadMorePictures = function() {
+									alert("LOADMORE PICTURES");
+									$scope.$broadcast('scroll.infiniteScrollComplete');
+								  };
+									
 
-  $scope.attendees = [
-    { firstname: 'Nicolas', lastname: 'Cage' },
-    { firstname: 'Jean-Claude', lastname: 'Van Damme' },
-    { firstname: 'Keanu', lastname: 'Reeves' },
-    { firstname: 'Steven', lastname: 'Seagal' }
-  ];
-  
-  $scope.toggleLeft = function() {
-    $ionicSideMenuDelegate.toggleLeft();
-  };
-  
-  
+								  $scope.attendees = [
+									{ firstname: 'Nicolas', lastname: 'Cage' },
+									{ firstname: 'Jean-Claude', lastname: 'Van Damme' },
+									{ firstname: 'Keanu', lastname: 'Reeves' },
+									{ firstname: 'Steven', lastname: 'Seagal' }
+								  ];
+								  
+								  $scope.toggleLeft = function() {
+									$ionicSideMenuDelegate.toggleLeft();
+								  };
   
   
 })
@@ -192,6 +205,8 @@ margin:30px 0px;
       $scope.activity.splice(0, 1);
     }
   };
+  
+  
   
 });
  </script>
@@ -239,12 +254,16 @@ margin:30px 0px;
 			 <div class="item" ng-repeat="gallery in galleryList">
               <ion-scroll direction="x">
                 <ion-infinite-scroll
-                                     on-infinite="loadMorePictures"
+                                     on-infinite=""
                                      distance="10%">
                 </ion-infinite-scroll>
                 <a ng-repeat="picture in gallery">
                   <img class="vh20 picture" src="{{ picture.thumbnail }}">
-                    </a>
+					<div class="content_on_images">
+						<h5>title</h5>
+					
+					</div>
+				   </a>
                   </ion-scroll>
              </div>
 
