@@ -36,17 +36,28 @@ margin:30px 0px;
 }
 .scroll > a {
     display: inline-block;
-    margin-left: 10px;
-    position: relative;
-}
-.content_on_images{
-  bottom: 19px;
+margin-left: 10px;
+position: relative;
+width: 150px;
+
+
+	}
+.scroll > a img{width:150px; height:150px; border: 1px solid #ccc; padding:2px;}
+	.content_on_images{
+  bottom: 5px;
     position: absolute;
     text-align: center;
     width: 100%;
     z-index: 99;
+	background: none repeat scroll 0 0 #797979;
+	  padding: 10px 0;
 }
-
+.content_on_images h5{
+font-size:13px;
+white-space: normal !important;
+color:#fff;
+font-family:"Times New Roman";
+}
  </style>
  <script>
  
@@ -101,12 +112,54 @@ margin:30px 0px;
 })
 
 .controller('MainCtrl', function($scope, $ionicSideMenuDelegate) {
-	
-	
-	
-	
+	var responed = "";
+	var images_url = "";
+	$.ajax({
+						
+						url: "http://www.iimbaa.org/IIMBAA/mobile/news3.php",
+						type: "POST",
+						dataType: "json",
+						async	: false,
+						data: {
+						"start": 0,
+						"end": 9,
+						},
+						
+						
+						success: function (res) {
+									
+								responed = res;	
+								/*alert('sucesss');
+								//	$("ion-scroll").addClass('hhhh');
+							   var index;
+							
+							for (index = 0; index < res.length; ++index) {
+								
+								  var images_url = res[index]['image_intro'];
+								  if(images_url ==""){
+									images_url ="http://www.iimbaa.org/IIMBAA/mobile/images/logo99.png";
+								 }
+								//$("ion-scroll").append('<a ng-repeat="picture in gallery"><img class="vh20 picture" src="'+images_url +'"><div class="content_on_images"><h5>title</h5></div></a>');
+							} */
+							
+						},
+						error: function(rtn){
+							alert("Seems you are offline. Please check your internet connection.");
+						}
+						
+						
+					});
+					
+	//	alert(responed.length);
+	/*var gallery2  = [
+
+		for(var i = 0; i < responed.length; i++){
+		alert(i);
+		{"id": i, "thumbnail" : responed[i]['image_intro']},	
+	];	
+	*/
 	var placeholder = "http://placehold.it/150x150";
-	var gallery2 = [
+	/*var gallery2 = [
 									{"id": 1, "thumbnail": placeholder},
 									{"id": 2, "thumbnail": placeholder},
 									{"id": 3, "thumbnail": placeholder},
@@ -117,8 +170,23 @@ margin:30px 0px;
 									{"id": 8, "thumbnail": placeholder},
 									{"id": 9, "thumbnail": placeholder},
 									{"id": 10, "thumbnail": placeholder}
-								  ];
+								  ];  */
+	var gallery2 = [];							  
 								  
+	//alert(gallery2.length);
+	
+	for(var i = 0;  i < responed.length; i++){
+		var image_path  = responed[i]['image_intro'];
+		if(image_path =="" ){
+		
+			image_path ="http://www.iimbaa.org/IIMBAA/mobile/images/logo99.png";
+								
+		}
+		gallery2.push({ id: i ,thumbnail:image_path,titlenews:responed[i]['title'] });
+	}
+  //  alert(gallery2.length);							  
+								 
+								 
 								   var gallery3 = [
 									{"id": 1, "thumbnail": placeholder},
 									{"id": 2, "thumbnail": placeholder},
@@ -253,21 +321,19 @@ margin:30px 0px;
          <div>
 			 <div class="item" ng-repeat="gallery in galleryList">
               <ion-scroll direction="x">
-                <ion-infinite-scroll
-                                     on-infinite=""
-                                     distance="10%">
-                </ion-infinite-scroll>
+               
                 <a ng-repeat="picture in gallery">
                   <img class="vh20 picture" src="{{ picture.thumbnail }}">
 					<div class="content_on_images">
-						<h5>title</h5>
+						<h5>{{ picture.titlenews }}</h5>
 					
 					</div>
-				   </a>
-                  </ion-scroll>
+				 </a>
+				
+                </ion-scroll>
              </div>
 
-			<ion-infinite-scroll on-infinite="loadMoreGallery"  distance="10%"></ion-infinite-scroll>
+		
 		</div>
         </ion-content>
       </ion-view>
